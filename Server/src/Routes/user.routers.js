@@ -1,6 +1,6 @@
 import { Router } from "express";
 import passport from "../passportConfig.js";
-import { verifyJWT } from "../middlewares/auth.middlewares.js";
+import { verifyJWT } from "../Middlewares/auth.middlewares.js";
 
 import {
   signup,

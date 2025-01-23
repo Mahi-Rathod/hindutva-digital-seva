@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { verifyJWT, verifyAdmin } from "../middlewares/auth.middlewares.js";
+import { verifyJWT, verifyAdmin } from "../Middlewares/auth.middlewares.js";
 import { addPost, editPost, getPosts, viewPost, fetchTopPostsWithCategory } from "../Controllers/post.controller.js";
 import { addPostThumbnail } from "../Controllers/thumbnail.controller.js";
 
