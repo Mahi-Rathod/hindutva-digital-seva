@@ -6,7 +6,7 @@ import { getObjectUrl } from "../utils/uploadOnS3.js";
 import { sequelize } from "../DB/dBConnection.js";
 import { Like } from "../Models/like.model.js";
 import { Comment } from "../Models/comment.model.js";
-
+import { DB_Name } from "../constants.js";
 const addPost = async (req, res) => {
   try {
     const { title, type, thumbnailData, status, content, category } = req.body;
@@ -115,9 +115,9 @@ const fetchTopPostsWithCategory = async (req, res) => {
           pt.s3Key,  -- Assuming pt.s3Key is in postthumbnails table
           u.name AS authorName,
           ROW_NUMBER() OVER (PARTITION BY p.category ORDER BY p.createdAt DESC) AS \`rank\`
-        FROM hindutvadigitaldatabase.posts p
-        LEFT JOIN hindutvadigitaldatabase.postthumbnails pt ON pt.postId = p.id  -- Correct join condition
-        LEFT JOIN hindutvadigitaldatabase.users u ON u.id = p.authorId  -- Correct join condition for users
+        FROM ${DB_Name}.posts p
+        LEFT JOIN ${DB_Name}.postthumbnails pt ON pt.postId = p.id  -- Correct join condition
+        LEFT JOIN ${DB_Name}.users u ON u.id = p.authorId  -- Correct join condition for users
       )
       SELECT 
         rp.id,

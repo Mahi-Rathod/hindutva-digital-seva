@@ -2,7 +2,7 @@ import { User } from "../Models/user.model.js";
 import { Post } from "../Models/post.model.js";
 import { sequelize } from "../DB/dBConnection.js";
 import { Sequelize } from "sequelize";
-
+import { DB_Name } from "../constants.js";
 const getDashboardData = async (req, res) => {
   try {
     const totalUsers = await User.count();
@@ -27,8 +27,8 @@ const getDashboardData = async (req, res) => {
     const allPosts = await sequelize.query(
       `
         SELECT p.id, p.title, p.type, p.category, p.status, p.content, DATE(p.createdAt) AS date, u.name
-        FROM hindutvadigitaldatabase.posts AS p
-        INNER JOIN hindutvadigitaldatabase.users AS u
+        FROM ${DB_Name}.posts AS p
+        INNER JOIN ${DB_Name}.users AS u
         ON p.authorId = u.id
         ORDER BY p.createdAt DESC
         LIMIT 20
