@@ -27,8 +27,8 @@ const getDashboardData = async (req, res) => {
     const allPosts = await sequelize.query(
       `
         SELECT p.id, p.title, p.type, p.category, p.status, p.content, DATE(p.createdAt) AS date, u.name
-        FROM ${DB_Name}.posts AS p
-        INNER JOIN ${DB_Name}.users AS u
+        FROM ${DB_Name}.Posts AS p
+        INNER JOIN ${DB_Name}.Users AS u
         ON p.authorId = u.id
         ORDER BY p.createdAt DESC
         LIMIT 20

@@ -185,7 +185,7 @@ const signInUsingOTP = async (req, res) => {
     const options = {
       httpsOnly: true,
       secure: secure,
-      sameSite: "Lax",
+      sameSite: "none",
       maxAge: 3600000,
     };
 
@@ -219,6 +219,7 @@ const signOut = async (req, res) => {
 
     const options = {
       httpsOnly: true,
+      sameSite: "none",
       secure: true,
     };
 
