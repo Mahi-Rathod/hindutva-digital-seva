@@ -115,9 +115,9 @@ const fetchTopPostsWithCategory = async (req, res) => {
           pt.s3Key,  -- Assuming pt.s3Key is in postthumbnails table
           u.name AS authorName,
           ROW_NUMBER() OVER (PARTITION BY p.category ORDER BY p.createdAt DESC) AS \`rank\`
-        FROM ${DB_Name}.posts p
-        LEFT JOIN ${DB_Name}.postthumbnails pt ON pt.postId = p.id  -- Correct join condition
-        LEFT JOIN ${DB_Name}.users u ON u.id = p.authorId  -- Correct join condition for users
+        FROM ${DB_Name}.Posts p
+        LEFT JOIN ${DB_Name}.PostThumbnails pt ON pt.postId = p.id  -- Correct join condition
+        LEFT JOIN ${DB_Name}.Users u ON u.id = p.authorId  -- Correct join condition for users
       )
       SELECT 
         rp.id,
