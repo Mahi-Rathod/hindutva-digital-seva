@@ -139,7 +139,7 @@ const signInUsingPassword = async (req, res) => {
     const options = {
       httpsOnly: true,
       secure: secure,
-      sameSite: "Lax",
+      sameSite: "none",
       maxAge: 3600000,
     };
 
