@@ -40,7 +40,7 @@ const signup = async (req, res) => {
     });
 
     if (existedUser) {
-      throw new Error("User Present");
+      throw new Error("User Present with provided email or mobile!");
     }
 
     let permissions;
@@ -92,7 +92,10 @@ const signInUsingPassword = async (req, res) => {
     const { userIdentifier, password } = req.body;
 
     if ([userIdentifier, password].some((field) => field?.trim() === "")) {
-      throw new Error("All Fields are required!");
+      return res.status(400).json({
+        success: false,
+        message: "All fields are required!",
+      });
     }
 
     let findString;
@@ -113,17 +116,26 @@ const signInUsingPassword = async (req, res) => {
     });
 
     if (!user) {
-      throw new Error("User not found!");
+      return res.status(404).json({
+        success: false,
+        message: "User not found!",
+      });
     }
 
     if (!user.emailVerified) {
-      throw new Error("You are not verified your email, please verify first.");
+      return res.status(403).json({
+        success: false,
+        message: "Email not verified. Please verify your email first.",
+      });
     }
 
     const isPasswordValid = await user.isPasswordCorrect(password);
 
     if (!isPasswordValid) {
-      throw new Error("You Entered Wrong password.");
+      return res.status(401).json({
+        success: false,
+        message: "Incorrect password. Please try again.",
+      });
     }
 
     const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
@@ -137,22 +149,22 @@ const signInUsingPassword = async (req, res) => {
     const secure = true;
 
     const options = {
-      httpsOnly: true,
+      httpOnly: true,
       secure: secure,
       sameSite: "none",
-      maxAge: 3600000,
+      maxAge: 3600000, // 1 hour
     };
 
     return res.status(200).cookie("accessToken", accessToken, options).json({
       success: true,
       user: loggedUser,
       accessToken: accessToken,
-      message: "User Logged in Successfully",
+      message: "User logged in successfully.",
     });
   } catch (err) {
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
-      message: err.message,
+      message: "An internal server error occurred. Please try again later.",
     });
   }
 };
