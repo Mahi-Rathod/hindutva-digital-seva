@@ -11,8 +11,7 @@ initializeAssociations();
 dotenv.config();
 const app = express();
 
-app.use(express.json());
-app.use(cookieParser());
+
 
 const allowedOrigins = process.env.CORS_ORIGIN;
 
@@ -34,6 +33,11 @@ app.use(
     exposedHeaders: ["Content-Length", "Authorization", "Set-Cookie"],
   })
 );
+
+app.use(cookieParser());
+
+app.use(express.json());
+
 
 app.use(
   session({
