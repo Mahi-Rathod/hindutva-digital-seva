@@ -18,23 +18,20 @@ passport.use(
             user = await User.findOne({ email: profile.emails[0].value });
   
             if (!user) {
-              // If no user found by email, create a new user
               user = await User.create({
                 googleId: profile.id,
-                userName: profile.emails[0].value, // Use email as username
-                email: profile.emails[0].value, // Store email
-                name: profile.displayName, // Use display name
+                userName: profile.emails[0].value, 
+                email: profile.emails[0].value, 
+                name: profile.displayName, 
                 emailVerified: true,
                 password: profile.emails[0].value
               });
             } else {
-              // User exists but didn't log in with Google, you might want to link the Google account
-              user.googleId = profile.id; // Optional: Link Google ID to existing user
-              await user.save(); // Save the user with updated Google ID
+              user.googleId = profile.id;
+              await user.save();
             }
           }
 
-        // Generate JWT tokens
         const accessTokenJWT = jwt.sign(
           { userId: user._id },
           process.env.ACCESS_TOKEN_SECRET,

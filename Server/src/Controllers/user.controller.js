@@ -57,7 +57,7 @@ const signup = async (req, res) => {
       email,
       mobile,
       password,
-      role,
+      role  : role || "reader",
       permissions: permissions,
     });
 
