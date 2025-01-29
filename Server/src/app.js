@@ -1,9 +1,9 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import session from "express-session";
-import passport from "./passportConfig.js"
+import passport from "./passportConfig.js";
 import dotenv from "dotenv";
-import cors from 'cors';
+import cors from "cors";
 import { initializeAssociations } from "./DB/initAssociations.js";
 
 initializeAssociations();
@@ -14,11 +14,26 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
-app.use(cors({
-  origin:process.env.CORS_ORIGIN,
-  credentials: true,
-  exposedHeaders: ['Content-Length', 'Authorization', 'Set-Cookie'],  
-}));
+const allowedOrigins = process.env.CORS_ORIGIN;
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // 2. Check if NO origin is allowed (for testing, remove in production!)
+      if (!origin && allowedOrigins.length === 0) {
+        return callback(null, true); // Allow all if no origin is set AND no allowed origins
+      }
+
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+    exposedHeaders: ["Content-Length", "Authorization", "Set-Cookie"],
+  })
+);
 
 app.use(
   session({
@@ -30,8 +45,6 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
-
-
 
 //Import Routers here
 import userRouter from "./Routes/user.routers.js";
